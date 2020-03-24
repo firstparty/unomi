@@ -149,12 +149,4 @@ public class Account extends Item {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        Account account = new Account();
-        account.addProfileId("Neil Test ID");
-        System.out.println(account.toString());
-    }
-
-
-
 }
