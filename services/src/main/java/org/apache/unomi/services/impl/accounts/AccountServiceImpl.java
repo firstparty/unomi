@@ -11,7 +11,6 @@ import org.apache.unomi.api.services.DefinitionsService;
 import org.apache.unomi.api.services.AccountService;
 import org.apache.unomi.api.services.SchedulerService;
 import org.apache.unomi.api.services.SegmentService;
-import org.apache.unomi.persistence.spi.CustomObjectMapper;
 import org.apache.unomi.persistence.spi.PersistenceService;
 import org.apache.unomi.persistence.spi.PropertyHelper;
 import org.apache.unomi.services.impl.ParserHelper;
@@ -19,7 +18,6 @@ import org.osgi.framework.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -842,5 +840,72 @@ public class AccountServiceImpl implements AccountService, SynchronousBundleList
     // TODO: Figure this part out in "META-INF.cxs.personas" as reference
     private void loadPredefinedAccounts(BundleContext bundleContext) {}
 
+    // TODO: Figure out if this is necessary
+    public void setPropertyTypeTarget(URL predefinedPropertyTypeURL, PropertyType propertyType) {
+        if (StringUtils.isBlank(propertyType.getTarget())) {
+            String[] splitPath = predefinedPropertyTypeURL.getPath().split("/");
+            String target = splitPath[4];
+            if (StringUtils.isNotBlank(target)) {
+                propertyType.setTarget(target);
+            }
+        }
+    }
 
+    private boolean merge(Map<String, Object> target, Map<String, Object> object) {
+        boolean changed = false;
+        for (Map.Entry<String, Object> newEntry : object.entrySet()) {
+            if (newEntry.getValue() != null) {
+                String packageName = newEntry.getValue().getClass().getPackage().getName();
+                if (newEntry.getValue() instanceof Collection) {
+                    target.put(newEntry.getKey(), newEntry.getValue());
+                    changed = true;
+                } else if (newEntry.getValue() instanceof Map) {
+                    Map<String, Object> currentMap = (Map) target.get(newEntry.getKey());
+                    if (currentMap == null) {
+                        target.put(newEntry.getKey(), newEntry.getValue());
+                        changed = true;
+                    } else {
+                        changed |= merge(currentMap, (Map) newEntry.getValue());
+                    }
+                } else if (StringUtils.equals(packageName, "java.lang")) {
+                    if (newEntry.getValue() != null && !newEntry.getValue().equals(target.get(newEntry.getKey()))) {
+                        target.put(newEntry.getKey(), newEntry.getValue());
+                        changed = true;
+                    }
+                } else if (newEntry.getValue().getClass().isEnum()) {
+                    target.put(newEntry.getKey(), newEntry.getValue());
+                    changed = true;
+                } else {
+                    if (target.get(newEntry.getKey()) != null) {
+                        changed |= merge(target.get(newEntry.getKey()), newEntry.getValue());
+                    } else {
+                        target.put(newEntry.getKey(), newEntry.getValue());
+                        changed = true;
+                    }
+                }
+            } else {
+                if (target.containsKey(newEntry.getKey())) {
+                    target.remove(newEntry.getKey());
+                    changed = true;
+                }
+            }
+        }
+        return changed;
+    }
+
+    public void bundleChanged(BundleEvent event) {
+        switch (event.getType()) {
+            case BundleEvent.STARTED:
+                processBundleStartup(event.getBundle().getBundleContext());
+                break;
+            case BundleEvent.STOPPING:
+                processBundleStop(event.getBundle().getBundleContext());
+                break;
+        }
+    }
+
+
+    public void refresh() {
+        reloadPropertyTypes(true);
+    }
 }
