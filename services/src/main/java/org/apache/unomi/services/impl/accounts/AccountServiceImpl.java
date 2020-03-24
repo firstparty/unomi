@@ -203,7 +203,7 @@ public class AccountServiceImpl implements AccountService, SynchronousBundleList
         }
         bundleContext.addBundleListener(this);
         initializePurge();
-        schedulePropertyTypeLoad();
+//        schedulePropertyTypeLoad();
         logger.info("Account service initialized.");
     }
 
@@ -217,7 +217,7 @@ public class AccountServiceImpl implements AccountService, SynchronousBundleList
             return;
         }
         loadPredefinedAccounts(bundleContext);
-        loadPredefinedPropertyTypes(bundleContext);
+//        loadPredefinedPropertyTypes(bundleContext);
     }
 
     private void processBundleStop(BundleContext bundleContext) {

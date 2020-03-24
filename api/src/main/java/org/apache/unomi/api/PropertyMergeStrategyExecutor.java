@@ -34,4 +34,16 @@ public interface PropertyMergeStrategyExecutor {
      */
     boolean mergeProperty(String propertyName, PropertyType propertyType, List<Profile> profilesToMerge, Profile targetProfile);
 
+    /**
+     * Merges the value of the property identified by the specified name and type from the specified profiles into the specified target profile.
+     *
+     * @param propertyName    the name of the property to be merged
+     * @param propertyType    the type of the property to be merged
+     * @param accountsToMerge a List of accounts to merge
+     * @param targetAccount   the target account into which the specified accounts will be merged
+     * @return {@code true} if the target account was successfully modified as the result of the merge, {@code false} otherwise
+     */
+    // TODO: refactor into a more generic mergeProperty function that can take any type of object
+    boolean mergeProperty(String propertyName, PropertyType propertyType, List<Account> accountsToMerge, Account targetAccount);
+
 }
