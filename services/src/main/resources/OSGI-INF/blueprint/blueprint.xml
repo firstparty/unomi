@@ -211,6 +211,26 @@
             <value>org.osgi.framework.SynchronousBundleListener</value>
         </interfaces>
     </service>
+    <bean id="accountServiceImpl" class="org.apache.unomi.services.impl.accounts.AccountServiceImpl"
+          init-method="postConstruct" destroy-method="preDestroy">
+        <property name="persistenceService" ref="persistenceService"/>
+        <property name="definitionsService" ref="definitionsServiceImpl"/>
+        <property name="segmentService" ref="segmentServiceImpl"/>
+        <property name="bundleContext" ref="blueprintBundleContext"/>
+        <property name="purgeProfileInterval" value="${services.profile.purge.interval}"/>
+        <property name="purgeProfileInactiveTime" value="${services.profile.purge.inactiveTime}"/>
+        <property name="purgeProfileExistTime" value="${services.profile.purge.existTime}"/>
+        <property name="purgeSessionsAndEventsTime" value="${services.event.purge.existTime}"/>
+        <property name="forceRefreshOnSave" value="${services.profile.forceRefreshOnSave}" />
+        <property name="propertiesRefreshInterval" value="${services.properties.refresh.interval}"/>
+        <property name="schedulerService" ref="schedulerServiceImpl"/>
+    </bean>
+    <service id="accountService" ref="accountServiceImpl">
+        <interfaces>
+            <value>org.apache.unomi.api.services.AccountService</value>
+            <value>org.osgi.framework.SynchronousBundleListener</value>
+        </interfaces>
+    </service>
 
     <bean id="queryServiceImpl" class="org.apache.unomi.services.impl.queries.QueryServiceImpl"
           init-method="postConstruct" destroy-method="preDestroy">
