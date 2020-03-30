@@ -49,9 +49,11 @@ public class Event extends Item implements TimestampedItem {
     private String eventType;
     private String sessionId = null;
     private String profileId = null;
+    private String accountId = null;
     private Date timeStamp;
     private Map<String, Object> properties;
 
+    private transient Account account;
     private transient Profile profile;
     private transient Session session;
     private transient List<ActionPostExecutor> actionPostExecutors;
@@ -88,6 +90,37 @@ public class Event extends Item implements TimestampedItem {
         this.profile = profile;
         this.session = session;
         this.profileId = profile.getItemId();
+        this.scope = scope;
+        this.source = source;
+        this.target = target;
+
+        if (session != null) {
+            this.sessionId = session.getItemId();
+        }
+        this.timeStamp = timestamp;
+
+        this.properties = new HashMap<String, Object>();
+
+        actionPostExecutors = new ArrayList<>();
+    }
+
+    /**
+     * Instantiates a new Event.
+     *
+     * @param eventType the event type identifier
+     * @param session   the session associated with the event
+     * @param account   the account associated with the event
+     * @param scope     the scope from which the event is issued
+     * @param source    the source of the event
+     * @param target    the target of the event if any
+     * @param timestamp the timestamp associated with the event if provided
+     */
+    public Event(String eventType, Session session, Account account, String scope, Item source, Item target, Date timestamp) {
+        super(UUID.randomUUID().toString());
+        this.eventType = eventType;
+        this.account = account;
+        this.session = session;
+        this.accountId = account.getAccountId();
         this.scope = scope;
         this.source = source;
         this.target = target;
@@ -159,6 +192,24 @@ public class Event extends Item implements TimestampedItem {
     }
 
     /**
+     * Retrieves the account id of the Account associated with this event
+     *
+     * @return the account id
+     */
+    public String getAccountId() {
+        return accountId;
+    }
+
+    /**
+     * Sets the account id
+     *
+     * @param accountId the account id
+     */
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
+    /**
      * Retrieves the event type.
      *
      * @return the event type
@@ -208,6 +259,25 @@ public class Event extends Item implements TimestampedItem {
      */
     public void setProfile(Profile profile) {
         this.profile = profile;
+    }
+
+    /**
+     * Retrieves the account.
+     *
+     * @return the account
+     */
+    @XmlTransient
+    public Account getAccount() {
+        return account;
+    }
+
+    /**
+     * Sets the account.
+     *
+     * @param account the account
+     */
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     /**
