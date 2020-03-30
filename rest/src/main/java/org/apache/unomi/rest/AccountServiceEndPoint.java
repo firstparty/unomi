@@ -19,14 +19,14 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * A JAX-RS endpoint to manage {@link Profile}s and {@link Persona}s.
+ * A JAX-RS endpoint to manage {@link Account}s.
  */
 @WebService
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @CrossOriginResourceSharing(
-				allowAllOrigins = true,
-				allowCredentials = true
+		allowAllOrigins = true,
+		allowCredentials = true
 )
 public class AccountServiceEndPoint {
 	private static final Logger logger = LoggerFactory.getLogger(AccountServiceEndPoint.class.getName());
