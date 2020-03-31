@@ -156,6 +156,18 @@
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
+    <jaxrs:server address="/accounts" id="restAccountService">
+        <jaxrs:providers>
+            <ref component-id="jaxb-provider"/>
+            <ref component-id="cors-filter"/>
+            <ref component-id="jaas-filter"/>
+        </jaxrs:providers>
+
+        <jaxrs:serviceBeans>
+            <ref component-id="accountServiceEndPoint"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
     <jaxrs:server address="/cluster" id="restClusterService">
         <jaxrs:providers>
             <ref component-id="jaxb-provider"/>
@@ -209,6 +221,7 @@
     <reference id="definitionsService" interface="org.apache.unomi.api.services.DefinitionsService"/>
     <reference id="goalsService" interface="org.apache.unomi.api.services.GoalsService"/>
     <reference id="rulesService" interface="org.apache.unomi.api.services.RulesService"/>
+    <reference id="accountService" interface="org.apache.unomi.api.services.AccountService"/>
     <reference id="profileService" interface="org.apache.unomi.api.services.ProfileService"/>
     <reference id="clusterService" interface="org.apache.unomi.api.services.ClusterService"/>
     <reference id="queryService" interface="org.apache.unomi.api.services.QueryService"/>
@@ -249,6 +262,11 @@
         <property name="eventService" ref="eventService"/>
         <property name="segmentService" ref="segmentService"/>
         <property name="localizationHelper" ref="localizationHelper"/>
+    </bean>
+
+    <bean id="accountServiceEndPoint" class="org.apache.unomi.rest.AccountServiceEndPoint">
+        <property name="accountService" ref="accountService"/>
+        <property name="eventService" ref="eventService"/>
     </bean>
 
     <bean id="clusterServiceEndPoint" class="org.apache.unomi.rest.ClusterServiceEndPoint">

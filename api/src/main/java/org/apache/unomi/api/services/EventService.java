@@ -46,6 +46,11 @@ public interface EventService {
     int PROFILE_UPDATED = 2;
 
     /**
+     * The associated account was updated following an event being handled.
+     */
+    int ACCOUNT_UDPATED = 3;
+
+    /**
      * Propagates the specified event in the context server, notifying
      * {@link EventListenerService} instances if needed. If the event is persistent ({@link Event#isPersistent()}, it will be persisted appropriately. Once the event is
      * propagated, any {@link ActionPostExecutor} the event defined will be executed and the user profile updated if needed.
