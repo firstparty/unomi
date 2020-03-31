@@ -44,6 +44,6 @@ public interface PropertyMergeStrategyExecutor {
      * @return {@code true} if the target account was successfully modified as the result of the merge, {@code false} otherwise
      */
     // TODO: refactor into a more generic mergeProperty function that can take any type of object
-    boolean mergeProperty(String propertyName, PropertyType propertyType, List<Account> accountsToMerge, Account targetAccount);
+//    boolean mergeProperty(String propertyName, PropertyType propertyType, List<Account> accountsToMerge, Account targetAccount);
 
 }

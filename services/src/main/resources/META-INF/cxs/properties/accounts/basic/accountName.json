@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "id": "accountName",
+    "name": "Account name",
+    "systemTags": [
+      "properties",
+      "profileProperties",
+      "basicProfileProperties",
+      "personalIdentifierProperties"
+    ]
+  },
+  "type": "string",
+  "defaultValue": "",
+  "automaticMappingsFrom": [ ],
+  "rank": "101.0"
+}
